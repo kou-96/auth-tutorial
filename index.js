@@ -1,9 +1,15 @@
 const express = require("express");
+const cors = require("cors");
 const pool = require("./db");
-
 const app = express();
 const PORT = 5001;
 
+const corsOption = {
+  origin: ["http://localhost:5173"],
+  optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOption));
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -13,7 +19,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.post("/login", (req, res) => {
+app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
 
   pool.query(
@@ -39,7 +45,7 @@ app.post("/login", (req, res) => {
   );
 });
 
-app.post("/signup", (req, res) => {
+app.post("/api/signup", (req, res) => {
   const { email, password } = req.body;
 
   if (!email) return res.status(400).send("メールアドレスを入力してください");
@@ -68,5 +74,5 @@ app.post("/signup", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`server is running on ${PORT}`);
+  console.log(`サーバーがポート${PORT}で起動しました。`);
 });
